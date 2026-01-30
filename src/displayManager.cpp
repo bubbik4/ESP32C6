@@ -46,6 +46,15 @@ void DisplayManager::drawClock() {
     }_display.display();
 }
 
+void DisplayManager::updateClock() {
+    static unsigned long lastUpdate = 0;
+
+    if(millis() - lastUpdate > 1000) {
+        lastUpdate = millis();
+        drawClock();
+    }
+}
+
 void DisplayManager::drawMenu() {
     _display.clearDisplay();
 

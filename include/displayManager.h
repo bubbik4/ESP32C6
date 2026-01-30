@@ -17,6 +17,7 @@ public:
 
     void drawBootScreen();
     void drawClock();
+    void updateClock();
 
     void drawMenu();
     void drawWIP();

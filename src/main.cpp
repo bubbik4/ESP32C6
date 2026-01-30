@@ -11,6 +11,17 @@ NetManager net;
 Button btnLeft(D7);
 Button btnRight(D8);
 
+enum AppState {
+  STATE_MENU,
+  STATE_CLOCK,
+  STATE_POMODORO,
+  STATE_STOPWATCH,
+  STATE_WIFI,
+  STATE_SYSTEM
+};
+
+AppState currentState = STATE_MENU;
+
 void setup() {
   Serial.begin(115200);
   Serial.println("Initializing...");
@@ -31,14 +42,54 @@ void setup() {
 void loop() {
   net.update();
 
-  if(btnLeft.isClicked()) {
-    LOG("L Click");
-    display.moveSelection(1);
-  }
+  if(currentState == STATE_MENU) {
 
-  if(btnRight.isClicked()) {
-    LOG("R Click");
-    //
+    if(btnLeft.isClicked()) {
+      LOG("L Click");
+      display.moveSelection(1);
+    }
+
+    if(btnRight.isClicked()) {
+      LOG("R Click");
+      
+      int selected = display.getSelectedIndex();
+
+      switch (selected) {
+        case 0: // clock
+          LOG("CLOCK");
+          currentState = STATE_CLOCK;
+          display.drawClock();
+          break;
+        case 1: // pomodoro
+          LOG("POMODORO");
+          currentState = STATE_POMODORO;
+          display.drawWIP(); //to be implemented
+          break;
+        case 2: // stopwatch
+          LOG("STOPWATCH");
+          currentState = STATE_STOPWATCH;
+          display.drawWIP(); //to be implemented
+          break;
+        case 3: // WiFi Info
+          LOG("WIFI INFO");
+          currentState = STATE_WIFI;
+          display.drawWIP(); //to be implemented
+          break;
+        case 4: // system
+          LOG("SYSTEM");
+          currentState = STATE_SYSTEM;
+          display.drawWIP(); //to be implemented
+          break;
+      }
+    }
+  } 
+  else if(currentState == STATE_CLOCK) {
+    display.updateClock();
+
+    if(btnRight.isClicked()) {
+      currentState = STATE_MENU;
+      display.drawMenu();
+    }
   }
 }
 

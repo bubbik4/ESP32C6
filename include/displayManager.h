@@ -8,8 +8,10 @@
 class DisplayManager {
 public:
     DisplayManager();
-    
+
     void begin();
+
+    void drawBootScreen();
 
 private:
     Adafruit_SSD1306 _display;

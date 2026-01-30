@@ -13,3 +13,15 @@ void DisplayManager::begin() {
     _display.clearDisplay();
     _display.display();
 }
+
+void DisplayManager::drawBootScreen() {
+    _display.clearDisplay();
+
+    _display.fillRect(0, 0, 128, 18, SSD1306_WHITE);
+    _display.setTextColor(SSD1306_BLACK, SSD1306_WHITE);
+    _display.setTextSize(2);
+    _display.setCursor(10, 2);
+    _display.print("Hello");
+
+    _display.display();
+}

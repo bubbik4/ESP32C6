@@ -4,6 +4,8 @@ NetManager::NetManager() {}
 
 void NetManager::begin() {
     setupWiFi();
+    setupOTA();
+    setupTime();
 }
 
 void NetManager::update() {
@@ -11,7 +13,10 @@ void NetManager::update() {
 }
 
 void NetManager::setupWiFi() {
+    WiFi.mode(WIFI_STA);
     WiFiManager wm;
+
+    wm.setConnectTimeout(30);
 
     wm.setConfigPortalTimeout(180); //s
 
@@ -19,6 +24,8 @@ void NetManager::setupWiFi() {
         LOG("[!!] No WIFI connection");
         LOG("Connect to AP: " + String(WIFI_AP_NAME));
     });
+
+    wm.setDebugOutput(true);
 
     if(!wm.autoConnect(WIFI_AP_NAME)) {
         LOG("WiFi Timeout");
@@ -47,4 +54,9 @@ void NetManager::setupOTA() {
         else if(error == OTA_END_ERROR) LOG("End Failed");
     });
     ArduinoOTA.begin();
+}
+
+void NetManager::setupTime() {
+    configTime(3600, 3600, "pool.ntp.org");
+    LOG("Time server UP");
 }

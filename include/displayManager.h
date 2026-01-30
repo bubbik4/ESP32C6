@@ -14,6 +14,7 @@ public:
     void begin();
 
     void drawBootScreen();
+    void drawClock();
 
 private:
     Adafruit_SSD1306 _display;

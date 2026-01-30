@@ -18,5 +18,6 @@ public:
 
 private:
     void setupWiFi();
+    void setupTime();
     void setupOTA();
 };

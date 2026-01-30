@@ -19,9 +19,11 @@ public:
     void drawClock();
 
     void drawMenu();
-    void drawTimer();
+    void drawWIP();
 
     void moveSelection(int dir);
+
+    int getSelectedIndex() const { return _selectedIndex; }
 
 private:
     Adafruit_SSD1306 _display;

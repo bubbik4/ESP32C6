@@ -103,3 +103,13 @@ void DisplayManager::moveSelection(int dir) {
 
     drawMenu();
 }
+
+void DisplayManager::drawWIP() {
+    _display.clearDisplay();
+    _display.setCursor(0, 64/2);
+    _display.setTextSize(1);
+    _display.setTextColor(SSD1306_WHITE);
+    _display.print("Work in progress...");
+
+    _display.display();
+}

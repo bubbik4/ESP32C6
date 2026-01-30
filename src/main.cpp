@@ -41,15 +41,17 @@ void setup() {
 
 void loop() {
   net.update();
+  btnRight.update();
+  btnLeft.update();
 
   if(currentState == STATE_MENU) {
 
-    if(btnLeft.isClicked()) {
+    if(btnLeft.hasJustClicked()) {
       LOG("L Click");
       display.moveSelection(1);
     }
 
-    if(btnRight.isClicked()) {
+    if(btnRight.hasJustClicked()) {
       LOG("R Click");
       
       int selected = display.getSelectedIndex();
@@ -85,10 +87,16 @@ void loop() {
   } 
   else if(currentState == STATE_CLOCK) {
     display.updateClock();
-
-    if(btnRight.isClicked()) {
+  }
+  if(currentState != STATE_MENU) {
+    if(btnRight.hasJustHeld(800)) {
+      LOG("Exiting");
       currentState = STATE_MENU;
       display.drawMenu();
+    }
+
+    if(btnRight.hasJustClicked()) {
+      LOG("ignoring");
     }
   }
 }

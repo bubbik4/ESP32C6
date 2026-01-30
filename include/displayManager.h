@@ -1,3 +1,5 @@
+#pragma once
+
 #include <Arduino.h>
 #include <Wire.h>
 #include <Adafruit_SSD1306.h>
@@ -15,6 +17,4 @@ public:
 
 private:
     Adafruit_SSD1306 _display;
-
-    
 };

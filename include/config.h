@@ -1,4 +1,6 @@
-
+// -- WIFI & OTA --
+#define WIFI_AP_NAME "XIAO-SETUP"
+#define HOSTNAME "XIAO-C6"
 
 // -- OLED ---
 #define SCR_WIDTH 128

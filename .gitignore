@@ -1,0 +1,18 @@
+# --- PlatformIO ---
+.pio
+.pioenvs
+.piolibdeps
+
+# --- Biblioteki i Zależności ---
+lib/readme.txt
+
+# --- VS Code i IDE ---
+.vscode/
+.history/
+*.log
+test/
+
+.DS_Store
+Thumbs.db
+*.bak
+*.tmp

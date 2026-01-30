@@ -2,6 +2,7 @@
 
 #include "displayManager.h"
 #include "networkManager.h"
+#include "config.h"
 
 DisplayManager display;
 NetManager net;
@@ -21,9 +22,10 @@ void setup() {
 
 void loop() {
   net.update();
-
-
   // temp main screen
-  display.drawClock();
+  // display.drawMenu();
+
+  delay(1000);
+  display.moveSelection(1);
 
 }

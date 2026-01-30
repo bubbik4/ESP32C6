@@ -45,3 +45,61 @@ void DisplayManager::drawClock() {
         
     }_display.display();
 }
+
+void DisplayManager::drawMenu() {
+    _display.clearDisplay();
+
+    _display.drawLine(0, _headerHeight - 1, SCR_WIDTH, _headerHeight - 1, SSD1306_WHITE);
+
+    _display.setTextSize(1);
+    _display.setTextColor(SSD1306_WHITE);
+    _display.setCursor(0, 4);
+    _display.print("   MAIN MENU   ");
+
+
+    for (int i = 0; i < _itemsPerScreen; i++) {
+        int itemIndex = _scrollOffset + i;
+        
+        if (itemIndex >= _menuItems.size()) break;
+
+        int yPosition = _headerHeight + (i * _lineHeight);
+
+        if (itemIndex == _selectedIndex) {
+            _display.fillRect(0, yPosition, SCR_WIDTH, _lineHeight, SSD1306_WHITE);
+
+            _display.setTextColor(SSD1306_BLACK);
+        } else {
+            _display.setTextColor(SSD1306_WHITE);
+        }
+
+        _display.setCursor(5, yPosition + 2);
+        _display.print(_menuItems[itemIndex].c_str());
+    }
+
+    _display.display();
+}
+
+void DisplayManager::moveSelection(int dir) {   
+    _selectedIndex += dir;
+
+    if(_selectedIndex < 0) {
+        _selectedIndex = _menuItems.size() - 1;
+
+        _scrollOffset = _menuItems.size() - _itemsPerScreen;
+        if(_scrollOffset < 0) _scrollOffset = 0;
+    }
+    else if(_selectedIndex >= _menuItems.size()) {
+        _selectedIndex = 0;
+        _scrollOffset = 0;
+    }
+
+    if(_selectedIndex >= _scrollOffset + _itemsPerScreen) {
+        _scrollOffset = _selectedIndex - _itemsPerScreen + 1;
+    }
+
+    if(_selectedIndex < _scrollOffset) {
+        _scrollOffset = _selectedIndex;
+    }
+
+    drawMenu();
+}

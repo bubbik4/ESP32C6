@@ -10,6 +10,7 @@ private:
 
     unsigned long _pressStartTime;
     bool _isLongPressHandled;
+    int _prevUiState;
 
 public:
     Button(int pin, unsigned long debounceDelay = 50) : _pin(pin), _debounceDelay(debounceDelay) {
@@ -18,6 +19,7 @@ public:
     _lastDebounceTime = 0;
     _pressStartTime = 0;
     _isLongPressHandled = false;
+    _prevUiState = HIGH;
     }
 
     void begin() {
@@ -52,13 +54,13 @@ public:
     }
 
     bool hasJustClicked() {
-        static int prevUiState = HIGH;
+        
         bool click = false;
 
-        if(_state == HIGH && prevUiState == LOW) {
+        if(_state == HIGH && _prevUiState == LOW) {
             if(!_isLongPressHandled) click = true;
         }
-        prevUiState = _state;
+        _prevUiState = _state;
         return click;
     }
 

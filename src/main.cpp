@@ -75,7 +75,7 @@ void loop() {
         case 3: // WiFi Info
           LOG("WIFI INFO");
           currentState = STATE_WIFI;
-          display.drawWIP(); //to be implemented
+          display.drawWiFiInfo();
           break;
         case 4: // system
           LOG("SYSTEM");
@@ -87,6 +87,13 @@ void loop() {
   } 
   else if(currentState == STATE_CLOCK) {
     display.updateClock();
+  } 
+  else if(currentState == STATE_WIFI) {
+    static unsigned long lastWiFiUpdate = 0;
+    if(millis() - lastWiFiUpdate > 2000) {//2s
+      lastWiFiUpdate = millis();
+      display.drawWiFiInfo();
+    }
   }
   if(currentState != STATE_MENU) {
     if(btnRight.hasJustHeld(800)) {

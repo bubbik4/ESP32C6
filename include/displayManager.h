@@ -15,12 +15,17 @@ public:
 
     void begin();
 
+    // seperate oled tabs
     void drawBootScreen();
-    void drawClock();
-    void updateClock();
-
     void drawMenu();
+    void drawClock();
+    void drawPomodoro();
+    void drawStopwatch();
+    void drawWiFiInfo();
+    void drawSystem();
     void drawWIP();
+
+    void updateClock();
 
     void moveSelection(int dir);
 

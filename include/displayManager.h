@@ -21,7 +21,7 @@ public:
     void drawBootScreen();
     void drawMenu();
     void drawClock();
-    void drawPomodoro(String time, PomodoroState state);
+    void drawPomodoro(String time, PomodoroState state, int count);
     void drawStopwatch();
     void drawWiFiInfo();
     void drawSystem();

@@ -183,7 +183,7 @@ void DisplayManager::drawWIP() {
     _display.display();
 }
 
-void DisplayManager::drawPomodoro(String time, PomodoroState state) {
+void DisplayManager::drawPomodoro(String time, PomodoroState state, int count) {
     _display.clearDisplay();
 
     _display.drawLine(0, _headerHeight - 1, SCR_WIDTH, _headerHeight - 1, SSD1306_WHITE);
@@ -191,6 +191,11 @@ void DisplayManager::drawPomodoro(String time, PomodoroState state) {
     _display.setTextColor(SSD1306_WHITE);
     _display.setCursor(40, 4);
     _display.print("POMODORO");
+
+    _display.setCursor(100, 4);
+    _display.print("#");
+    _display.print(count);
+    
 
     _display.setTextSize(3);
 

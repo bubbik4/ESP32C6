@@ -92,7 +92,7 @@ void loop() {
           LOG("POMODORO");
           currentState = STATE_POMODORO;
           // pomodoro.reset();
-          display.drawPomodoro(pomodoro.getFormattedTime(), pomodoro.getState());
+          display.drawPomodoro(pomodoro.getFormattedTime(), pomodoro.getState(), pomodoro.getCycleCount());
           break;
         case 2: // stopwatch
           LOG("STOPWATCH");
@@ -135,9 +135,9 @@ void loop() {
     if (btnLeft.hasJustClicked()) {
        pomodoro.reset();
     }
-    
 
-    display.drawPomodoro(pomodoro.getFormattedTime(), pomodoro.getState());
+
+    display.drawPomodoro(pomodoro.getFormattedTime(), pomodoro.getState(), pomodoro.getCycleCount());
   }
 
 

@@ -29,6 +29,8 @@ public:
         return false;
     }
 
+    int getCycleCount() const { return _cycleCount; }
+
 private:
     PomodoroState _state;
     PomodoroState _prevState;
@@ -42,4 +44,6 @@ private:
 
     void startWork();
     void startBreak();
+
+    int _cycleCount = 0;
 };

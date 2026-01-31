@@ -2,6 +2,7 @@
 
 PomodoroTimer::PomodoroTimer() {
     _state = POM_IDLE;
+    _prevState = POM_IDLE;
     _remainingTimeSeconds = _workDurationMinutes * 60;
 }
 
@@ -12,10 +13,12 @@ void PomodoroTimer::toggleStartPause() {
             break;
         case POM_WORK:
         case POM_BREAK:
+            _prevState = _state;
             _state = POM_PAUSED;
             break;
         case POM_PAUSED:
-            _state = POM_WORK;
+            _state = _prevState;
+            _lastTickTime = millis();
             break;
     }
 }
@@ -48,7 +51,7 @@ void PomodoroTimer::update() {
         } else {
             _alarmTriggered = true;
 
-            if(_state = POM_WORK) {
+            if(_state == POM_WORK) {
                 startBreak();
             } else {
                 startWork();

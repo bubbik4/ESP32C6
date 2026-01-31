@@ -31,6 +31,7 @@ public:
 
 private:
     PomodoroState _state;
+    PomodoroState _prevState;
     bool _alarmTriggered = false;
 
     const int _workDurationMinutes = 25;

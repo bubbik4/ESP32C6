@@ -2,14 +2,21 @@
 
 #include "displayManager.h"
 #include "networkManager.h"
+#include "pomodoro.h"
 #include "Button.h"
 #include "config.h"
 
 DisplayManager display;
 NetManager net;
+PomodoroTimer pomodoro;
 
 Button btnLeft(D7);
 Button btnRight(D8);
+
+bool isAlarmAnimating = false;
+int alarmBlinkCount = 0;
+unsigned long lastBlinkTime = 0;
+bool blinkState = false;
 
 enum AppState {
   STATE_MENU,
@@ -43,6 +50,9 @@ void loop() {
   net.update();
   btnRight.update();
   btnLeft.update();
+  pomodoro.update();
+
+  
 
   if(currentState == STATE_MENU) {
 
@@ -65,7 +75,8 @@ void loop() {
         case 1: // pomodoro
           LOG("POMODORO");
           currentState = STATE_POMODORO;
-          display.drawWIP(); //to be implemented
+          // pomodoro.reset();
+          display.drawPomodoro(pomodoro.getFormattedTime(), pomodoro.getState());
           break;
         case 2: // stopwatch
           LOG("STOPWATCH");
@@ -85,9 +96,11 @@ void loop() {
       }
     }
   } 
+
   else if(currentState == STATE_CLOCK) {
     display.updateClock();
   } 
+
   else if(currentState == STATE_WIFI) {
     static unsigned long lastWiFiUpdate = 0;
     if(millis() - lastWiFiUpdate > 2000) {//2s
@@ -95,6 +108,40 @@ void loop() {
       display.drawWiFiInfo();
     }
   }
+  
+  else if(currentState == STATE_POMODORO) {
+    pomodoro.update();
+
+   if (pomodoro.isAlarmTriggered()) {
+        isAlarmAnimating = true;
+        alarmBlinkCount = 0;
+    }
+
+    if (isAlarmAnimating) {
+        if (millis() - lastBlinkTime > 300) {
+            lastBlinkTime = millis();
+            blinkState = !blinkState;
+            display.invertScreen(blinkState);
+            alarmBlinkCount++;
+            if (alarmBlinkCount >= 6) { 
+                isAlarmAnimating = false;
+                display.invertScreen(false);
+            }
+        }
+    }
+    
+    if (btnRight.hasJustClicked()) {
+       pomodoro.toggleStartPause();
+    }
+
+    if (btnLeft.hasJustClicked()) {
+       pomodoro.reset();
+    }
+
+    display.drawPomodoro(pomodoro.getFormattedTime(), pomodoro.getState());
+  }
+
+
   if(currentState != STATE_MENU) {
     if(btnRight.hasJustHeld(800)) {
       LOG("Exiting");
@@ -106,5 +153,6 @@ void loop() {
       LOG("ignoring");
     }
   }
+
 }
 

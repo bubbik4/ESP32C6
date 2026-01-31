@@ -1,5 +1,4 @@
 #include "displayManager.h"
-#include "networkManager.h"
 
 DisplayManager::DisplayManager() 
     : _display(SCR_WIDTH, SCR_HEIGHT, &Wire, -1) {}
@@ -170,12 +169,50 @@ void DisplayManager::moveSelection(int dir) {
     drawMenu();
 }
 
+void DisplayManager::invertScreen(bool invert) {
+    _display.invertDisplay(invert);
+}
+
 void DisplayManager::drawWIP() {
     _display.clearDisplay();
     _display.setCursor(0, 64/2);
     _display.setTextSize(1);
     _display.setTextColor(SSD1306_WHITE);
     _display.print("Work in progress...");
+
+    _display.display();
+}
+
+void DisplayManager::drawPomodoro(String time, PomodoroState state) {
+    _display.clearDisplay();
+
+    _display.drawLine(0, _headerHeight - 1, SCR_WIDTH, _headerHeight - 1, SSD1306_WHITE);
+    _display.setTextSize(1);
+    _display.setTextColor(SSD1306_WHITE);
+    _display.setCursor(40, 4);
+    _display.print("POMODORO");
+
+    _display.setTextSize(3);
+
+    _display.setCursor(20,25);
+    _display.print(time);
+
+    _display.setTextSize(1);
+    _display.setCursor(0, 54);
+
+    String statusText = "";
+    switch (state) {
+        case POM_WORK: statusText = ">> [focus] <<"; break;
+        case POM_BREAK: statusText = ">> [break] <<"; break;
+        case POM_PAUSED: statusText = ">> [paused] <<"; break;
+        case POM_IDLE: statusText = ">> READY <<"; break;
+    }
+
+    int centerOffset = (21 - statusText.length()) * 3;
+    if(centerOffset < 0) centerOffset = 0;
+    _display.setCursor(centerOffset, 54);
+
+    _display.print(statusText);
 
     _display.display();
 }

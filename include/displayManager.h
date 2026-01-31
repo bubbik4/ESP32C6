@@ -8,6 +8,8 @@
 #include <string>
 
 #include "config.h"
+#include "networkManager.h"
+#include "pomodoro.h"
 
 class DisplayManager {
 public:
@@ -19,7 +21,7 @@ public:
     void drawBootScreen();
     void drawMenu();
     void drawClock();
-    void drawPomodoro();
+    void drawPomodoro(String time, PomodoroState state);
     void drawStopwatch();
     void drawWiFiInfo();
     void drawSystem();
@@ -28,6 +30,7 @@ public:
     void updateClock();
 
     void moveSelection(int dir);
+    void invertScreen(bool invert);
 
     int getSelectedIndex() const { return _selectedIndex; }
 

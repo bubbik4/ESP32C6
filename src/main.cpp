@@ -132,10 +132,13 @@ void loop() {
        pomodoro.toggleStartPause();
     }
 
+    if(btnLeft.hasJustHeld()) {
+      pomodoro.switchState();
+    }
+
     if (btnLeft.hasJustClicked()) {
        pomodoro.reset();
     }
-
 
     display.drawPomodoro(pomodoro.getFormattedTime(), pomodoro.getState(), pomodoro.getCycleCount());
   }

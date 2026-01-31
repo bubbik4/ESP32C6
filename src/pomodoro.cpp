@@ -32,7 +32,13 @@ void PomodoroTimer::startWork() {
 
 void PomodoroTimer::startBreak() {
     _state = POM_BREAK;
-    _remainingTimeSeconds = _breakDurationMinutes * 60;
+
+    if(_cycleCount > 0 && _cycleCount % 4 == 0) {
+        _remainingTimeSeconds = _longBreakDurationMinutes * 60;
+    } else {
+        _remainingTimeSeconds = _breakDurationMinutes * 60;
+    }
+    
     _lastTickTime = millis();
 }
 
@@ -60,6 +66,18 @@ void PomodoroTimer::update() {
                 startWork();
             }
         }
+    }
+}
+
+void PomodoroTimer::switchState() {
+   if (_state == POM_WORK || (_state == POM_PAUSED && _prevState == POM_WORK)) {
+        startBreak(); 
+    }
+    else if (_state == POM_BREAK || (_state == POM_PAUSED && _prevState == POM_BREAK)) {
+        startWork();
+    }
+    else if (_state == POM_IDLE) {
+        startWork();
     }
 }
 

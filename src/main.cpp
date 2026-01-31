@@ -52,7 +52,23 @@ void loop() {
   btnLeft.update();
   pomodoro.update();
 
-  
+  if (pomodoro.isAlarmTriggered()) {
+      isAlarmAnimating = true;
+      alarmBlinkCount = 0;
+  }
+
+  if (isAlarmAnimating) {
+      if (millis() - lastBlinkTime > 300) {
+          lastBlinkTime = millis();
+          blinkState = !blinkState;
+          display.invertScreen(blinkState);
+          alarmBlinkCount++;
+          if (alarmBlinkCount >= 6) { 
+              isAlarmAnimating = false;
+              display.invertScreen(false);
+          }
+      }
+  }
 
   if(currentState == STATE_MENU) {
 
@@ -110,25 +126,7 @@ void loop() {
   }
   
   else if(currentState == STATE_POMODORO) {
-    pomodoro.update();
 
-   if (pomodoro.isAlarmTriggered()) {
-        isAlarmAnimating = true;
-        alarmBlinkCount = 0;
-    }
-
-    if (isAlarmAnimating) {
-        if (millis() - lastBlinkTime > 300) {
-            lastBlinkTime = millis();
-            blinkState = !blinkState;
-            display.invertScreen(blinkState);
-            alarmBlinkCount++;
-            if (alarmBlinkCount >= 6) { 
-                isAlarmAnimating = false;
-                display.invertScreen(false);
-            }
-        }
-    }
     
     if (btnRight.hasJustClicked()) {
        pomodoro.toggleStartPause();
@@ -137,6 +135,7 @@ void loop() {
     if (btnLeft.hasJustClicked()) {
        pomodoro.reset();
     }
+    
 
     display.drawPomodoro(pomodoro.getFormattedTime(), pomodoro.getState());
   }

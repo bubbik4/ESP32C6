@@ -84,6 +84,10 @@ void DisplayManager::drawMenu() {
         _display.setCursor(5, yPosition + 2);
         _display.print(_menuItems[itemIndex].c_str());
     }
+    if(WiFi.status() != WL_CONNECTED) { 
+        _display.setCursor(80, 4);
+        _display.print("no wifi");
+    }
 
     _display.display();
 }
@@ -195,7 +199,7 @@ void DisplayManager::drawPomodoro(String time, PomodoroState state, int count) {
     _display.setCursor(100, 4);
     _display.print("#");
     _display.print(count);
-    
+
 
     _display.setTextSize(3);
 

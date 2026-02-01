@@ -13,6 +13,7 @@ void NetManager::update() {
 }
 
 void NetManager::setupWiFi() {
+    WiFi.setHostname(HOSTNAME);
     WiFi.mode(WIFI_STA);
     WiFiManager wm;
 
@@ -27,36 +28,46 @@ void NetManager::setupWiFi() {
 
     wm.setDebugOutput(true);
 
-    if(!wm.autoConnect(WIFI_AP_NAME)) {
+    if(!wm.autoConnect(WIFI_AP_NAME, "passwd")) {
         LOG("WiFi Timeout");
-        // restart
     }
 
-    LOG("WiFi connected");
-    LOGF("IP: %s\n", WiFi.localIP().toString().c_str());
+    if(isConnected()) {
+        LOG("WiFi connected");
+        LOGF("IP: %s\n", WiFi.localIP().toString().c_str());
+    } else LOG("WiFi not set up");
+    WiFi.setSleep(true);
 }
 
 void NetManager::setupOTA() {
-    ArduinoOTA.setHostname(HOSTNAME);
+    if(isConnected()) {
+        ArduinoOTA.setHostname(HOSTNAME);
 
-    ArduinoOTA.onStart([]() {
-        LOG("OTA Start");
-    });
-    ArduinoOTA.onEnd([]() {
-        LOG("\nOTA End");
-    });
-    ArduinoOTA.onError([](ota_error_t error) {
-        LOGF("Error[%u]: ", error);
-        if(error == OTA_AUTH_ERROR) LOG("Auth Failed");
-        else if(error == OTA_BEGIN_ERROR) LOG("Begin Failed");
-        else if(error == OTA_CONNECT_ERROR) LOG("Connect Failed");
-        else if(error == OTA_RECEIVE_ERROR) LOG("Recieve Failed");
-        else if(error == OTA_END_ERROR) LOG("End Failed");
-    });
-    ArduinoOTA.begin();
+        ArduinoOTA.onStart([]() {
+            LOG("OTA Start");
+        });
+        ArduinoOTA.onEnd([]() {
+            LOG("\nOTA End");
+        });
+        ArduinoOTA.onError([](ota_error_t error) {
+            LOGF("Error[%u]: ", error);
+            if(error == OTA_AUTH_ERROR) LOG("Auth Failed");
+            else if(error == OTA_BEGIN_ERROR) LOG("Begin Failed");
+            else if(error == OTA_CONNECT_ERROR) LOG("Connect Failed");
+            else if(error == OTA_RECEIVE_ERROR) LOG("Recieve Failed");
+            else if(error == OTA_END_ERROR) LOG("End Failed");
+        });
+        ArduinoOTA.begin();
+    } else LOG("OTA not set up - NO WIFI");
 }
 
 void NetManager::setupTime() {
-    configTime(3600, 3600, "pool.ntp.org");
-    LOG("Time server UP");
+    if(isConnected()) {
+        configTime(0, 0, "pool.ntp.org", "time.nist.gov");
+
+        setenv("TZ", "CET-1CEST,M3.5.0,M10.5.0/3", 1); // Polish timezone
+        tzset();
+
+        LOG("Time server UP");
+    } else LOG("Time server not connected");
 }

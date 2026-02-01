@@ -151,9 +151,7 @@ void loop() {
       display.drawMenu();
     }
 
-    if(btnRight.hasJustClicked()) {
-      LOG("ignoring");
-    }
+
   }
 
 }

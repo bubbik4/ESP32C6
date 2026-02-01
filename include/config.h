@@ -8,6 +8,10 @@
 #define SCR_SDA    D9
 #define SCR_SCL    D10
 
+// --BATTERY --
+#define BATTERY_PIN A0
+#define BATTERY_INTERVAL 3000;
+
 // -- DEBUG --
 #define DEBUG_MODE 1
 #if DEBUG_MODE

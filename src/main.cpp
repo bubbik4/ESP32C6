@@ -1,7 +1,9 @@
 #include <Arduino.h>
+#include <SPIFFS.h>
 
 #include "displayManager.h"
 #include "networkManager.h"
+#include "powerManager.h"
 #include "pomodoro.h"
 #include "Button.h"
 #include "config.h"
@@ -9,6 +11,7 @@
 DisplayManager display;
 NetManager net;
 PomodoroTimer pomodoro;
+PowerManager power;
 
 Button btnLeft(D7);
 Button btnRight(D8);
@@ -33,6 +36,12 @@ void setup() {
   Serial.begin(115200);
   Serial.println("Initializing...");
 
+  if(!SPIFFS.begin(true)) {
+    LOG("An error occured while mounting SPIFFS");
+  }
+
+  power.begin();
+
   btnLeft.begin();
   btnRight.begin();
 
@@ -48,6 +57,7 @@ void setup() {
 
 void loop() {
   net.update();
+  power.update();
   btnRight.update();
   btnLeft.update();
   pomodoro.update();
@@ -107,7 +117,10 @@ void loop() {
         case 4: // system
           LOG("SYSTEM");
           currentState = STATE_SYSTEM;
-          display.drawWIP(); //to be implemented
+
+          float used = SPIFFS.usedBytes() / (1024.0 * 1024.0);
+          float total = SPIFFS.totalBytes() / (1024.0 * 1024.0);
+          display.drawSystem(power.getVoltage(), power.getPercentage(), used, total);
           break;
       }
     }
@@ -142,6 +155,16 @@ void loop() {
 
     display.drawPomodoro(pomodoro.getFormattedTime(), pomodoro.getState(), pomodoro.getCycleCount());
   }
+
+  else if(currentState == STATE_SYSTEM) {
+    static unsigned long lastSysUpdate = 0;
+    if(millis() - lastSysUpdate > 1000) {
+      lastSysUpdate = millis();
+      float used = SPIFFS.usedBytes() / (1024.0 * 1024.0);
+      float total = SPIFFS.totalBytes() / (1024.0 * 1024.0);
+      display.drawSystem(power.getVoltage(), power.getPercentage(), used, total);
+    }
+  } 
 
 
   if(currentState != STATE_MENU) {

@@ -225,3 +225,45 @@ void DisplayManager::drawPomodoro(String time, PomodoroState state, int count) {
 
     _display.display();
 }
+
+void DisplayManager::drawSystem(float voltage, int percent, float usedMB, float totalMB) {
+    _display.clearDisplay();
+
+    _display.drawLine(0, _headerHeight - 1, SCR_WIDTH, _headerHeight - 1, SSD1306_WHITE);
+    _display.setTextSize(1);
+    _display.setTextColor(SSD1306_WHITE);
+    _display.setCursor(30, 4);
+    _display.print("SYSTEM INFO");
+    
+    _display.setCursor(0, 20);
+    _display.print("PWR:");
+
+    _display.setTextSize(1);
+    _display.setCursor(30, 20);
+    _display.print(percent);
+    _display.print("%");
+
+    _display.setCursor(65, 20);
+    _display.printf("(%.2fV)", voltage);
+
+    int barWidth = map(percent, 0, 100, 0, 128);
+    _display.fillRect(0, 30, barWidth, 2, SSD1306_WHITE);
+    _display.drawRect(0, 30, 128, 2, SSD1306_WHITE);
+
+    _display.setCursor(0, 40);
+    _display.print("DSK:");
+
+    _display.setCursor(30, 40);
+    _display.printf("%.2f/%.2f MB", usedMB, totalMB);
+
+    if(totalMB > 0) {
+        int diskPercent = (int)((usedMB / totalMB) * 100);
+        if(diskPercent > 100) diskPercent = 100;
+
+        int diskBarWidth = map(diskPercent, 0, 100, 0, 128);
+        _display.fillRect(0, 52, diskBarWidth, 4, SSD1306_WHITE);
+        _display.drawRect(0, 52, 128, 4, SSD1306_WHITE);
+    }
+    
+    _display.display();
+}

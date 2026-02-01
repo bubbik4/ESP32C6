@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "networkManager.h"
+#include "powerManager.h"
 #include "pomodoro.h"
 
 class DisplayManager {
@@ -24,7 +25,7 @@ public:
     void drawPomodoro(String time, PomodoroState state, int count);
     void drawStopwatch();
     void drawWiFiInfo();
-    void drawSystem();
+    void drawSystem(float voltage, int percent, float usedMB, float totalMB);
     void drawWIP();
 
     void updateClock();

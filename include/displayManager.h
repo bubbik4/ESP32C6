@@ -24,6 +24,7 @@ public:
     void drawWiFiInfo(String ssid, String ip, String mac, int rssi, bool connected);
     void drawSystem(float voltage, int percent, float usedMB, float totalMB);
     void drawWIP();
+    void drawConfirmation(String message, bool yesSelected);
 
     void updateClock();
 

@@ -254,3 +254,47 @@ void DisplayManager::drawSystem(float voltage, int percent, float usedMB, float 
     
     _display.display();
 }
+
+void DisplayManager::drawConfirmation(String message, bool yesSelected) {
+    _display.clearDisplay();
+
+    _display.fillRect(0, 0, 128, 16, SSD1306_WHITE);
+    _display.setTextColor(SSD1306_BLACK);
+    _display.setTextSize(1);
+    _display.setCursor(25, 4);
+    _display.print("ARE YOU SURE?");
+
+    _display.setTextColor(SSD1306_WHITE);
+    _display.setCursor(0,25);
+
+    int msgCenter = (21 - message.length()) * 3;
+    if(msgCenter < 0) msgCenter = 0;
+    _display.setCursor(msgCenter, 25);
+    _display.print(message);
+
+    int yBtn = 48;
+    int wBtn = 40;
+    int hBtn = 14;
+
+    if(yesSelected) {
+        _display.fillRect(10, yBtn, wBtn, hBtn, SSD1306_WHITE);
+        _display.setTextColor(SSD1306_BLACK);
+    } else {
+        _display.drawRect(10, yBtn, wBtn, hBtn, SSD1306_WHITE);
+        _display.setTextColor(SSD1306_WHITE);
+    }
+    _display.setCursor(22, yBtn + 3);
+    _display.print("YES");
+
+    if(!yesSelected) {
+        _display.fillRect(78, yBtn, wBtn, hBtn, SSD1306_WHITE);
+        _display.setTextColor(SSD1306_BLACK);
+    } else {
+        _display.drawRect(78, yBtn, wBtn, hBtn, SSD1306_WHITE);
+        _display.setTextColor(SSD1306_WHITE);
+    }
+    _display.setCursor(93, yBtn + 3);
+    _display.print("NO");
+    
+    _display.display();
+}

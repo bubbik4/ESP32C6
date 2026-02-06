@@ -8,9 +8,6 @@
 #include <string>
 
 #include "config.h"
-#include "networkManager.h"
-#include "powerManager.h"
-#include "pomodoro.h"
 
 class DisplayManager {
 public:
@@ -22,9 +19,9 @@ public:
     void drawBootScreen();
     void drawMenu();
     void drawClock();
-    void drawPomodoro(String time, PomodoroState state, int count);
+    void drawPomodoro(String time, String statusLabel, int count);
     void drawStopwatch();
-    void drawWiFiInfo();
+    void drawWiFiInfo(String ssid, String ip, String mac, int rssi, bool connected);
     void drawSystem(float voltage, int percent, float usedMB, float totalMB);
     void drawWIP();
 

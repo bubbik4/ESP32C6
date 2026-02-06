@@ -84,15 +84,11 @@ void DisplayManager::drawMenu() {
         _display.setCursor(5, yPosition + 2);
         _display.print(_menuItems[itemIndex].c_str());
     }
-    if(WiFi.status() != WL_CONNECTED) { 
-        _display.setCursor(80, 4);
-        _display.print("no wifi");
-    }
 
     _display.display();
 }
 
-void DisplayManager::drawWiFiInfo() {
+void DisplayManager::drawWiFiInfo(String ssid, String ip, String mac, int rssi, bool connected) {
     _display.clearDisplay();
 
     _display.drawLine(0, _headerHeight - 1, SCR_WIDTH, _headerHeight - 1, SSD1306_WHITE);
@@ -105,20 +101,19 @@ void DisplayManager::drawWiFiInfo() {
     int _yStart = _headerHeight + 4;
     int lineStep = 10;
 
-    if(WiFi.status() == WL_CONNECTED) {
+    if(connected) {
         _display.setCursor(0, _yStart);
         _display.print("SSID: ");
-        _display.print(WiFi.SSID());
+        _display.print(ssid);
 
         _display.setCursor(0, _yStart + lineStep);
         _display.print("IP: ");
-        _display.print(WiFi.localIP());
+        _display.print(ip);
 
         _display.setCursor(0, _yStart + (lineStep*2));
         _display.print("MAC:");
-        _display.print(WiFi.macAddress());
+        _display.print(mac);
 
-        int rssi = WiFi.RSSI();
         _display.setCursor(0, _yStart +(lineStep * 3));
         _display.printf("Sig: %d dBm", rssi);
 
@@ -187,7 +182,7 @@ void DisplayManager::drawWIP() {
     _display.display();
 }
 
-void DisplayManager::drawPomodoro(String time, PomodoroState state, int count) {
+void DisplayManager::drawPomodoro(String time, String statusLabel, int count) {
     _display.clearDisplay();
 
     _display.drawLine(0, _headerHeight - 1, SCR_WIDTH, _headerHeight - 1, SSD1306_WHITE);
@@ -209,19 +204,11 @@ void DisplayManager::drawPomodoro(String time, PomodoroState state, int count) {
     _display.setTextSize(1);
     _display.setCursor(0, 54);
 
-    String statusText = "";
-    switch (state) {
-        case POM_WORK: statusText = ">> [focus] <<"; break;
-        case POM_BREAK: statusText = ">> [break] <<"; break;
-        case POM_PAUSED: statusText = ">> [paused] <<"; break;
-        case POM_IDLE: statusText = ">> READY <<"; break;
-    }
-
-    int centerOffset = (21 - statusText.length()) * 3;
+    int centerOffset = (21 - statusLabel.length()) * 3;
     if(centerOffset < 0) centerOffset = 0;
     _display.setCursor(centerOffset, 54);
 
-    _display.print(statusText);
+    _display.print(statusLabel);
 
     _display.display();
 }

@@ -33,6 +33,8 @@ public:
 
     int getCycleCount() const { return _cycleCount; }
 
+    String getStatusLabel();
+
 private:
     PomodoroState _state;
     PomodoroState _prevState;

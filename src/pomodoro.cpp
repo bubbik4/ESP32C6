@@ -89,3 +89,13 @@ String PomodoroTimer::getFormattedTime() {
     sprintf(buffer, "%02d:%02d", minutes, seconds);
     return String(buffer);
 }
+
+String PomodoroTimer::getStatusLabel() {
+    switch(_state) {
+        case POM_WORK: return ">> [focus] <<";
+        case POM_BREAK: return ">> [break] <<";
+        case POM_PAUSED: return ">> [paused] <<";
+        case POM_IDLE: return ">> READY <<";
+        default: return "";
+    }
+}

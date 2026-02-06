@@ -102,7 +102,7 @@ void loop() {
           LOG("POMODORO");
           currentState = STATE_POMODORO;
           // pomodoro.reset();
-          display.drawPomodoro(pomodoro.getFormattedTime(), pomodoro.getState(), pomodoro.getCycleCount());
+          display.drawPomodoro(pomodoro.getFormattedTime(), pomodoro.getStatusLabel(), pomodoro.getCycleCount());
           break;
         case 2: // stopwatch
           LOG("STOPWATCH");
@@ -112,7 +112,7 @@ void loop() {
         case 3: // WiFi Info
           LOG("WIFI INFO");
           currentState = STATE_WIFI;
-          display.drawWiFiInfo();
+          // display.drawWiFiInfo();
           break;
         case 4: // system
           LOG("SYSTEM");
@@ -134,7 +134,15 @@ void loop() {
     static unsigned long lastWiFiUpdate = 0;
     if(millis() - lastWiFiUpdate > 2000) {//2s
       lastWiFiUpdate = millis();
-      display.drawWiFiInfo();
+
+      display.drawWiFiInfo(
+        WiFi.SSID(),
+        WiFi.localIP().toString(),
+        WiFi.macAddress(),
+        WiFi.RSSI(),
+        WiFi.status() == WL_CONNECTED
+      );
+
     }
   }
   
@@ -153,7 +161,11 @@ void loop() {
       pomodoro.reset();
     }
 
-    display.drawPomodoro(pomodoro.getFormattedTime(), pomodoro.getState(), pomodoro.getCycleCount());
+    display.drawPomodoro(
+      pomodoro.getFormattedTime(),
+      pomodoro.getStatusLabel(),
+      pomodoro.getCycleCount()
+    );
   }
 
   else if(currentState == STATE_SYSTEM) {

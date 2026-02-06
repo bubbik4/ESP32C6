@@ -43,7 +43,7 @@ void askConfirmation(String msg, std::function<void()> action) {
   previousState = currentState; // remember the last state
   confirmMessage = msg;
   onConfirmAction = action;
-  isYesSelected = false // reset to NO
+  isYesSelected = false; // reset to NO
   currentState = STATE_CONFIRM;
 }
 

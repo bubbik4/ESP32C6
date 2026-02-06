@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <SPIFFS.h>
+#include <functional>
 
 #include "displayManager.h"
 #include "networkManager.h"
@@ -27,10 +28,24 @@ enum AppState {
   STATE_POMODORO,
   STATE_STOPWATCH,
   STATE_WIFI,
-  STATE_SYSTEM
+  STATE_SYSTEM,
+  STATE_CONFIRM
 };
 
-AppState currentState = STATE_MENU;
+AppState previousState; // where to go when NO chosen
+AppState currentState = STATE_MENU; 
+
+String confirmMessage; // what to show on prompt 
+std::function<void()> onConfirmAction; // what to do when YES chosen
+bool isYesSelected = false; // defaults to NO
+
+void askConfirmation(String msg, std::function<void()> action) {
+  previousState = currentState; // remember the last state
+  confirmMessage = msg;
+  onConfirmAction = action;
+  isYesSelected = false // reset to NO
+  currentState = STATE_CONFIRM;
+}
 
 void setup() {
   Serial.begin(115200);
@@ -130,6 +145,24 @@ void loop() {
     display.updateClock();
   } 
 
+  else if(currentState == STATE_CONFIRM) {
+    if(btnLeft.hasJustClicked()) {
+      isYesSelected = !isYesSelected;
+    }
+
+    if (btnRight.hasJustClicked()) {
+      if(isYesSelected) {
+        if(onConfirmAction) onConfirmAction();
+        LOG("Confirmed: YES");
+      } else {
+        LOG("Confirmed: NO");
+      }
+      currentState = previousState; // revert to previous state if NO
+    }
+
+    display.drawConfirmation(confirmMessage, isYesSelected);
+  }
+
   else if(currentState == STATE_WIFI) {
     static unsigned long lastWiFiUpdate = 0;
     if(millis() - lastWiFiUpdate > 2000) {//2s
@@ -158,7 +191,9 @@ void loop() {
     }
 
     if (btnLeft.hasJustClicked()) {
-      pomodoro.reset();
+      askConfirmation("Reset Timer?", []() {
+        pomodoro.reset();
+      });
     }
 
     display.drawPomodoro(

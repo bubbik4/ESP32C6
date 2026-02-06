@@ -67,8 +67,6 @@ void setup() {
 
   LOG("System UP");
   display.drawMenu();
-
-  SPIFFS.remove("/test.txt");
 }
 
 
@@ -137,7 +135,17 @@ void loop() {
 
           float used = SPIFFS.usedBytes();
           float total = SPIFFS.totalBytes();
-          display.drawSystem(power.getVoltage(), power.getPercentage(), used, total);
+          size_t appUsed = ESP.getSketchSize();
+          size_t appTotal = ESP.getSketchSize() + ESP.getFreeSketchSpace();
+          display.drawSystem(
+            power.getVoltage(), 
+            power.getPercentage(), 
+            used, 
+            total, 
+            appUsed, 
+            appTotal
+          );
+
           break;
       }
     }
@@ -209,9 +217,19 @@ void loop() {
     static unsigned long lastSysUpdate = 0;
     if(millis() - lastSysUpdate > 1000) {
       lastSysUpdate = millis();
+      
       float used = SPIFFS.usedBytes();
       float total = SPIFFS.totalBytes();
-      display.drawSystem(power.getVoltage(), power.getPercentage(), used, total);
+      size_t appUsed = ESP.getSketchSize();
+      size_t appTotal = ESP.getSketchSize() + ESP.getFreeSketchSpace();
+      display.drawSystem(
+        power.getVoltage(), 
+        power.getPercentage(), 
+        used, 
+        total, 
+        appUsed, 
+        appTotal
+      );
     }
   } 
 

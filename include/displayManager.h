@@ -22,7 +22,7 @@ public:
     void drawPomodoro(String time, String statusLabel, int count);
     void drawStopwatch();
     void drawWiFiInfo(String ssid, String ip, String mac, int rssi, bool connected);
-    void drawSystem(float voltage, int percent, size_t usedBytes, size_t totalBytes);
+    void drawSystem(float voltage, int percent, size_t usedBytes, size_t totalBytes, size_t appUsed, size_t appTotal);
     void drawWIP();
     void drawConfirmation(String message, bool yesSelected);
 
@@ -35,6 +35,7 @@ public:
 
 private:
     Adafruit_SSD1306 _display;
+    void drawProgressBar(int x, int y, int width, int height, int percent);
 
     const std::vector<std::string> _menuItems = {
         "Clock",

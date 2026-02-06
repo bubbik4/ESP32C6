@@ -213,58 +213,73 @@ void DisplayManager::drawPomodoro(String time, String statusLabel, int count) {
     _display.display();
 }
 
-void DisplayManager::drawSystem(float voltage, int percent, size_t usedBytes, size_t totalBytes) {
+// helper function for progress bar drawing, to keep simplicity and not copy this 3 times
+void DisplayManager::drawProgressBar(int x, int y, int width, int height, int percent) {
+    _display.drawRect(x, y, width, height, SSD1306_WHITE);
+    if(percent > 0) {
+        int barW = map(percent, 0, 100, 0, width);
+        _display.fillRect(x, y, barW, height, SSD1306_WHITE);
+    }
+}
+
+static String formatSize(size_t bytes) {
+    if (bytes > 1024 * 1024) {
+        return String(bytes / (1024.0 * 1024.0), 2) + "MB";
+    }
+    return String(bytes / 1024.0, 0) + "KB";
+}
+
+void DisplayManager::drawSystem(float voltage, int percent, size_t usedBytes, size_t totalBytes, size_t appUsed, size_t appTotal) {
     _display.clearDisplay();
 
-    _display.drawLine(0, _headerHeight - 1, SCR_WIDTH, _headerHeight - 1, SSD1306_WHITE);
+    _display.drawLine(0, 16 - 1, SCR_WIDTH, 16, SSD1306_WHITE);
     _display.setTextSize(1);
     _display.setTextColor(SSD1306_WHITE);
     _display.setCursor(30, 4);
     _display.print("SYSTEM INFO");
     
-    _display.setCursor(0, 20);
+    // S1: Battery (y: 17-27)
+    
+    _display.setCursor(0, 17);
     _display.print("PWR:");
 
     _display.setTextSize(1);
-    _display.setCursor(30, 20);
+    _display.setCursor(30, 17);
     _display.print(percent);
     _display.print("%");
-
-    _display.setCursor(65, 20);
+    _display.setCursor(60, 17);
     _display.printf("(%.2fV)", voltage);
 
-    int barWidth = map(percent, 0, 100, 0, 128);
-    _display.fillRect(0, 30, barWidth, 2, SSD1306_WHITE);
-    _display.drawRect(0, 30, 128, 2, SSD1306_WHITE);
+    drawProgressBar(0, 24, 128, 2, percent);
 
-    _display.setCursor(0, 40);
-    _display.print("DSK:");
+    // S2: Disk / SPIFFS (y: 31-41)
 
-    float divisor = 1024.0;
-    String unit = " KB";
-
-    if(totalBytes > 1024 * 1024) {
-        divisor = 1024.0 * 1024.0;
-        unit = " MB";
-    }
-    String usedStr = String(usedBytes / divisor, 2);
-    String totalStr = String(totalBytes / divisor, 2);
-
-
-    _display.setCursor(30, 40);
-    _display.print(usedStr);
+    _display.setCursor(30, 31);
+    _display.print(formatSize(usedBytes));
     _display.print("/");
-    _display.print(totalStr);
-    _display.print(unit);
+    _display.print(formatSize(totalBytes));
 
-    // progress bar
-    if(totalBytes > 0) {
-        int diskPercent = (int) (((float)usedBytes / (float)totalBytes) * 100);
-        if(diskPercent > 100) diskPercent = 100;
-        int diskBarWidth = map(diskPercent, 0, 100, 0, 128);
-        _display.fillRect(0, 52, diskBarWidth, 4, SSD1306_WHITE);
-        _display.drawRect(0, 52, 128, 4, SSD1306_WHITE);
-    }
+    int dskPct = (totalBytes > 0) ? (int)((float)usedBytes / totalBytes * 100) : 0;
+    if(dskPct > 100) dskPct = 100;
+    
+    drawProgressBar( 0, 38, 128, 2, dskPct);
+
+    // S3: APP / CODE (y: 43-53)
+
+    _display.setCursor(0, 43);
+    _display.print("APP:");
+
+    _display.setCursor(30, 43);
+    _display.print(formatSize(appUsed));
+    _display.print("/");
+    _display.print(formatSize(appTotal));
+
+    int appPct = (appTotal > 0) ? (int)((float)appUsed / appTotal * 100) : 0;
+    if(appPct > 100) appPct = 100;
+
+    _display.drawRect(0, 52, 128, 4, SSD1306_WHITE);
+    int appBarWidth = map(appPct, 0, 100, 0, 128);
+    _display.fillRect(0, 52, appBarWidth, 4, SSD1306_WHITE);
     
     _display.display();
 }

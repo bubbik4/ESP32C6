@@ -213,7 +213,7 @@ void DisplayManager::drawPomodoro(String time, String statusLabel, int count) {
     _display.display();
 }
 
-void DisplayManager::drawSystem(float voltage, int percent, float usedMB, float totalMB) {
+void DisplayManager::drawSystem(float voltage, int percent, size_t usedBytes, size_t totalBytes) {
     _display.clearDisplay();
 
     _display.drawLine(0, _headerHeight - 1, SCR_WIDTH, _headerHeight - 1, SSD1306_WHITE);
@@ -240,13 +240,27 @@ void DisplayManager::drawSystem(float voltage, int percent, float usedMB, float 
     _display.setCursor(0, 40);
     _display.print("DSK:");
 
+    float divisor = 1024.0;
+    String unit = " KB";
+
+    if(totalBytes > 1024 * 1024) {
+        divisor = 1024.0 * 1024.0;
+        unit = " MB";
+    }
+    String usedStr = String(usedBytes / divisor, 2);
+    String totalStr = String(totalBytes / divisor, 2);
+
+
     _display.setCursor(30, 40);
-    _display.printf("%.2f/%.2f MB", usedMB, totalMB);
+    _display.print(usedStr);
+    _display.print("/");
+    _display.print(totalStr);
+    _display.print(unit);
 
-    if(totalMB > 0) {
-        int diskPercent = (int)((usedMB / totalMB) * 100);
+    // progress bar
+    if(totalBytes > 0) {
+        int diskPercent = (int) (((float)usedBytes / (float)totalBytes) * 100);
         if(diskPercent > 100) diskPercent = 100;
-
         int diskBarWidth = map(diskPercent, 0, 100, 0, 128);
         _display.fillRect(0, 52, diskBarWidth, 4, SSD1306_WHITE);
         _display.drawRect(0, 52, 128, 4, SSD1306_WHITE);

@@ -67,6 +67,8 @@ void setup() {
 
   LOG("System UP");
   display.drawMenu();
+
+  SPIFFS.remove("/test.txt");
 }
 
 
@@ -133,8 +135,8 @@ void loop() {
           LOG("SYSTEM");
           currentState = STATE_SYSTEM;
 
-          float used = SPIFFS.usedBytes() / (1024.0 * 1024.0);
-          float total = SPIFFS.totalBytes() / (1024.0 * 1024.0);
+          float used = SPIFFS.usedBytes();
+          float total = SPIFFS.totalBytes();
           display.drawSystem(power.getVoltage(), power.getPercentage(), used, total);
           break;
       }
@@ -207,8 +209,8 @@ void loop() {
     static unsigned long lastSysUpdate = 0;
     if(millis() - lastSysUpdate > 1000) {
       lastSysUpdate = millis();
-      float used = SPIFFS.usedBytes() / (1024.0 * 1024.0);
-      float total = SPIFFS.totalBytes() / (1024.0 * 1024.0);
+      float used = SPIFFS.usedBytes();
+      float total = SPIFFS.totalBytes();
       display.drawSystem(power.getVoltage(), power.getPercentage(), used, total);
     }
   } 

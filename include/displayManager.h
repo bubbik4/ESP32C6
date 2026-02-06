@@ -22,7 +22,7 @@ public:
     void drawPomodoro(String time, String statusLabel, int count);
     void drawStopwatch();
     void drawWiFiInfo(String ssid, String ip, String mac, int rssi, bool connected);
-    void drawSystem(float voltage, int percent, float usedMB, float totalMB);
+    void drawSystem(float voltage, int percent, size_t usedBytes, size_t totalBytes);
     void drawWIP();
     void drawConfirmation(String message, bool yesSelected);
 

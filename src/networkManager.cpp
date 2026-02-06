@@ -45,9 +45,11 @@ void NetManager::setupOTA() {
 
         ArduinoOTA.onStart([]() {
             LOG("OTA Start");
+            WiFi.setSleep(false);
         });
         ArduinoOTA.onEnd([]() {
             LOG("\nOTA End");
+            WiFi.setSleep(true);
         });
         ArduinoOTA.onError([](ota_error_t error) {
             LOGF("Error[%u]: ", error);

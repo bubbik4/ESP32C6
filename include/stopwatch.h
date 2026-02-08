@@ -11,6 +11,7 @@ public:
     void begin();
     void togglePause();
     void updateTimer();
+    bool getPausedState() const { return isPaused; }
 
     String getFormattedTime();
 

@@ -199,13 +199,14 @@ void loop() {
   }
 
   else if(currentState == STATE_STOPWATCH) {
+    display.drawStopwatch(stopwatch.getFormattedTime(), stopwatch.getPausedState());
     stopwatch.updateTimer();
 
     if (btnRight.hasJustClicked()) {
       stopwatch.togglePause();
     }
 
-    if(btnLeft.isClicked()) {
+    if(btnLeft.hasJustClicked()) {
       askConfirmation("Reset Stopwatch?", []() {
         stopwatch.begin();
       });

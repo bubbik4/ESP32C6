@@ -12,7 +12,7 @@ public:
     void togglePause();
     void updateTimer();
 
-    String getFormattedTime(float timeSecond, int timeMinute, int timeHour);
+    String getFormattedTime();
 
 private:
 

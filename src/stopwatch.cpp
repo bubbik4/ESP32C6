@@ -22,7 +22,7 @@ void Stopwatch::updateTimer() {
 
 }
 
-String Stopwatch::getFormattedTime(float timeSecond, int timeMinute, int timeHour) {
+String Stopwatch::getFormattedTime() {
     if(timeSecond > 0) timeSecond = 0.0;
     if(timeMinute > 0) timeMinute = 0;
     if(timeHour > 0) timeHour = 0;

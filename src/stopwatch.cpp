@@ -28,9 +28,9 @@ void Stopwatch::updateTimer() {
 }
 
 String Stopwatch::getFormattedTime() {
-    if(timeSecond > 0) timeSecond = 0.0;
-    if(timeMinute > 0) timeMinute = 0;
-    if(timeHour > 0) timeHour = 0;
+    if(timeSecond < 0) timeSecond = 0.0;
+    if(timeMinute < 0) timeMinute = 0;
+    if(timeHour < 0) timeHour = 0;
 
     String formattedTime = (String)timeHour + ":" + (String)timeMinute + ":" + (String)timeSecond;
 

@@ -6,12 +6,14 @@
 #include "networkManager.h"
 #include "powerManager.h"
 #include "pomodoro.h"
+#include "stopwatch.h"
 #include "Button.h"
 #include "config.h"
 
 DisplayManager display;
 NetManager net;
 PomodoroTimer pomodoro;
+Stopwatch stopwatch;
 PowerManager power;
 
 Button btnLeft(D7);
@@ -65,6 +67,8 @@ void setup() {
 
   net.begin();
 
+  stopwatch.begin();
+
   LOG("System UP");
   display.drawMenu();
 }
@@ -76,6 +80,10 @@ void loop() {
   btnRight.update();
   btnLeft.update();
   pomodoro.update();
+
+  // TEST
+  LOG(stopwatch.getFormattedTime());
+  // ----
 
   if (pomodoro.isAlarmTriggered()) {
       isAlarmAnimating = true;

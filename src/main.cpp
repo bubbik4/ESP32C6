@@ -81,8 +81,9 @@ void loop() {
   btnLeft.update();
   pomodoro.update();
 
+
   // TEST
-  LOG(stopwatch.getFormattedTime());
+  // LOG(stopwatch.getFormattedTime());
   // ----
 
   if (pomodoro.isAlarmTriggered()) {
@@ -130,7 +131,7 @@ void loop() {
         case 2: // stopwatch
           LOG("STOPWATCH");
           currentState = STATE_STOPWATCH;
-          display.drawWIP(); //to be implemented
+          // display.drawWIP(); //to be implemented
           break;
         case 3: // WiFi Info
           LOG("WIFI INFO");
@@ -195,6 +196,15 @@ void loop() {
       );
 
     }
+  }
+
+  else if(currentState == STATE_STOPWATCH) {
+    stopwatch.updateTimer();
+    
+    if (btnRight.hasJustClicked()) {
+      stopwatch.togglePause();
+    }
+
   }
   
   else if(currentState == STATE_POMODORO) {

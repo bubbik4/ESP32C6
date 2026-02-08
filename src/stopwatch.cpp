@@ -20,6 +20,11 @@ void Stopwatch::updateTimer() {
         return;
     }
 
+    if(millis() - lastUpdate > millisInterval) {
+        lastUpdate = millis();
+        timeSecond+=0.01;
+        LOG(getFormattedTime());
+    }
 }
 
 String Stopwatch::getFormattedTime() {
@@ -27,7 +32,7 @@ String Stopwatch::getFormattedTime() {
     if(timeMinute > 0) timeMinute = 0;
     if(timeHour > 0) timeHour = 0;
 
-    String formattedTime = (String)timeHour + (String)timeMinute + (String)timeSecond;
+    String formattedTime = (String)timeHour + ":" + (String)timeMinute + ":" + (String)timeSecond;
 
     return formattedTime;
 }

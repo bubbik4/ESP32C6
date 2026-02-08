@@ -21,4 +21,7 @@ private:
     int timeHour;
 
     bool isPaused;
+
+    unsigned long lastUpdate = 0;
+    const int millisInterval = 1;
 };

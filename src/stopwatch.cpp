@@ -6,7 +6,6 @@ void Stopwatch::begin() {
     timeSecond = 0.0;
     timeMinute = 0;
     timeHour   = 0;
-
     isPaused = true;
 }
 
@@ -24,6 +23,16 @@ void Stopwatch::updateTimer() {
         lastUpdate = millis();
         timeSecond+=0.01;
         LOG(getFormattedTime());
+    }
+
+    if(timeSecond >= 60.00) {
+        timeSecond = 0.00;
+        timeMinute++;
+    }
+
+    if(timeMinute >= 60) {
+        timeMinute = 0;
+        timeHour++;
     }
 }
 

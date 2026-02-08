@@ -23,5 +23,5 @@ private:
     bool isPaused;
 
     unsigned long lastUpdate = 0;
-    const int millisInterval = 1;
+    const int millisInterval = 10;
 };

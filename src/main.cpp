@@ -200,11 +200,16 @@ void loop() {
 
   else if(currentState == STATE_STOPWATCH) {
     stopwatch.updateTimer();
-    
+
     if (btnRight.hasJustClicked()) {
       stopwatch.togglePause();
     }
 
+    if(btnLeft.isClicked()) {
+      askConfirmation("Reset Stopwatch?", []() {
+        stopwatch.begin();
+      });
+    }
   }
   
   else if(currentState == STATE_POMODORO) {

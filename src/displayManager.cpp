@@ -329,7 +329,7 @@ void DisplayManager::drawConfirmation(String message, bool yesSelected) {
     _display.display();
 }
 
-void DisplayManager::drawStopwatch(String time, bool isPaused) {
+void DisplayManager::drawStopwatch(String time, float seconds, bool isPaused) {
     _display.clearDisplay();
 
     _display.drawLine(0, _headerHeight - 1, SCR_WIDTH, _headerHeight - 1, SSD1306_WHITE);
@@ -338,13 +338,20 @@ void DisplayManager::drawStopwatch(String time, bool isPaused) {
     _display.setCursor(0, 4);
     _display.print("Stopwatch");
 
+    int centerOffset = (17 - time.length()) * 3;
+    if(centerOffset < 0) centerOffset = 0;
+    _display.setCursor(centerOffset, 25);
+
     _display.setTextSize(2);
-    _display.setCursor(16,25);
     _display.print(time);
+
+    _display.setTextSize(1);
+    _display.setCursor(51, 40);
+    _display.print(seconds);
 
     if(isPaused) {
         _display.setTextSize(1);
-        _display.setCursor(50, 50);
+        _display.setCursor(55, 50);
         _display.print("P");
     }
 

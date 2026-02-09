@@ -199,7 +199,7 @@ void loop() {
   }
 
   else if(currentState == STATE_STOPWATCH) {
-    display.drawStopwatch(stopwatch.getFormattedTime(), stopwatch.getPausedState());
+    display.drawStopwatch(stopwatch.getFormattedTime(), stopwatch.getSeconds(), stopwatch.getPausedState());
     stopwatch.updateTimer();
 
     if (btnRight.hasJustClicked()) {

@@ -14,6 +14,7 @@ public:
     bool getPausedState() const { return isPaused; }
 
     String getFormattedTime();
+    float getSeconds();
 
 private:
 

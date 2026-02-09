@@ -48,8 +48,10 @@ void Stopwatch::updateTimer() {
 String Stopwatch::getFormattedTime() {
     String sHour = (timeHour < 10) ? "0" + String(timeHour) : String(timeHour);
     String sMin  = (timeMinute < 10) ? "0" + String(timeMinute) : String(timeMinute);
-    
-    String sSec  = (timeSecond < 10.0) ? "0" + String(timeSecond, 2) : String(timeSecond, 2);
+   
+    return sHour + ":" + sMin;
+}
 
-    return sHour + ":" + sMin + ":" + sSec;
+float Stopwatch::getSeconds() {
+    return timeSecond;
 }

@@ -23,6 +23,8 @@ private:
 
     bool isPaused;
 
+    unsigned long startTime  = 0;
+    unsigned long lastCalculationTime = 0;
     unsigned long lastUpdate = 0;
-    const int millisInterval = 10;
+    const int millisInterval = 40;
 };

@@ -5,6 +5,7 @@ DisplayManager::DisplayManager()
 
 void DisplayManager::begin() {
     Wire.begin(SCR_SDA, SCR_SCL);
+    Wire.setClock(400000);
 
     if(!_display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
         LOG("SSD1306 allocation failed");

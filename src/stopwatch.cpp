@@ -7,24 +7,28 @@ void Stopwatch::begin() {
     timeMinute = 0;
     timeHour   = 0;
     isPaused = true;
+    startTime = millis();
+    lastCalculationTime = millis();
 }
 
 void Stopwatch::togglePause() {
     isPaused = !isPaused;
+    if(!isPaused) {
+        lastCalculationTime = millis();
+    }
     LOG("Stopwatch toggled");
 }
 
 void Stopwatch::updateTimer() {
-    if (isPaused) {
-        return;
+    unsigned long currentMillis = millis();
+    if (!isPaused) {
+        unsigned long dt = currentMillis - lastCalculationTime;
+        timeSecond += dt / 1000.0;
+        lastCalculationTime = currentMillis;
+    } else {
+        lastCalculationTime = currentMillis;
     }
-
-    if(millis() - lastUpdate > millisInterval) {
-        lastUpdate = millis();
-        timeSecond+=0.01;
-        LOG(getFormattedTime());
-    }
-
+    
     if(timeSecond >= 60.00) {
         timeSecond = 0.00;
         timeMinute++;
@@ -33,6 +37,11 @@ void Stopwatch::updateTimer() {
     if(timeMinute >= 60) {
         timeMinute = 0;
         timeHour++;
+    }
+
+    if(millis() - lastUpdate > millisInterval) {
+        lastUpdate = millis();
+        LOG(getFormattedTime());
     }
 }
 

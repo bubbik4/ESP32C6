@@ -30,12 +30,12 @@ void Stopwatch::updateTimer() {
     }
     
     if(timeSecond >= 60.00) {
-        timeSecond = 0.00;
+        timeSecond -= 60.00;
         timeMinute++;
     }
 
     if(timeMinute >= 60) {
-        timeMinute = 0;
+        timeMinute -= 60;
         timeHour++;
     }
 
@@ -46,11 +46,10 @@ void Stopwatch::updateTimer() {
 }
 
 String Stopwatch::getFormattedTime() {
-    if(timeSecond < 0) timeSecond = 0.0;
-    if(timeMinute < 0) timeMinute = 0;
-    if(timeHour < 0) timeHour = 0;
+    String sHour = (timeHour < 10) ? "0" + String(timeHour) : String(timeHour);
+    String sMin  = (timeMinute < 10) ? "0" + String(timeMinute) : String(timeMinute);
+    
+    String sSec  = (timeSecond < 10.0) ? "0" + String(timeSecond, 2) : String(timeSecond, 2);
 
-    String formattedTime = (String)timeHour + ":" + (String)timeMinute + ":" + (String)timeSecond;
-
-    return formattedTime;
+    return sHour + ":" + sMin + ":" + sSec;
 }

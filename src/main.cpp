@@ -6,12 +6,14 @@
 #include "networkManager.h"
 #include "powerManager.h"
 #include "pomodoro.h"
+#include "stopwatch.h"
 #include "Button.h"
 #include "config.h"
 
 DisplayManager display;
 NetManager net;
 PomodoroTimer pomodoro;
+Stopwatch stopwatch;
 PowerManager power;
 
 Button btnLeft(D7);
@@ -65,6 +67,8 @@ void setup() {
 
   net.begin();
 
+  stopwatch.begin();
+
   LOG("System UP");
   display.drawMenu();
 }
@@ -76,6 +80,11 @@ void loop() {
   btnRight.update();
   btnLeft.update();
   pomodoro.update();
+
+
+  // TEST
+  // LOG(stopwatch.getFormattedTime());
+  // ----
 
   if (pomodoro.isAlarmTriggered()) {
       isAlarmAnimating = true;
@@ -122,7 +131,7 @@ void loop() {
         case 2: // stopwatch
           LOG("STOPWATCH");
           currentState = STATE_STOPWATCH;
-          display.drawWIP(); //to be implemented
+          // display.drawWIP(); //to be implemented
           break;
         case 3: // WiFi Info
           LOG("WIFI INFO");
@@ -186,6 +195,21 @@ void loop() {
         WiFi.status() == WL_CONNECTED
       );
 
+    }
+  }
+
+  else if(currentState == STATE_STOPWATCH) {
+    display.drawStopwatch(stopwatch.getFormattedTime(), stopwatch.getSeconds(), stopwatch.getPausedState());
+    stopwatch.updateTimer();
+
+    if (btnRight.hasJustClicked()) {
+      stopwatch.togglePause();
+    }
+
+    if(btnLeft.hasJustClicked()) {
+      askConfirmation("Reset Stopwatch?", []() {
+        stopwatch.begin();
+      });
     }
   }
   

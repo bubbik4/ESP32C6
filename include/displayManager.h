@@ -23,6 +23,7 @@ public:
     void drawStopwatch();
     void drawWiFiInfo(String ssid, String ip, String mac, int rssi, bool connected);
     void drawSystem(float voltage, int percent, size_t usedBytes, size_t totalBytes, size_t appUsed, size_t appTotal);
+    void drawStopwatch(String time, float seconds, bool isPaused);
     void drawWIP();
     void drawConfirmation(String message, bool yesSelected);
 

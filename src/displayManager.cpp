@@ -233,7 +233,7 @@ static String formatSize(size_t bytes) {
 void DisplayManager::drawSystem(float voltage, int percent, size_t usedBytes, size_t totalBytes, size_t appUsed, size_t appTotal) {
     _display.clearDisplay();
 
-    _display.drawLine(0, 16 - 1, SCR_WIDTH, 16, SSD1306_WHITE);
+    _display.drawLine(0, 16 - 1, SCR_WIDTH, 15, SSD1306_WHITE);
     _display.setTextSize(1);
     _display.setTextColor(SSD1306_WHITE);
     _display.setCursor(30, 4);
@@ -241,21 +241,21 @@ void DisplayManager::drawSystem(float voltage, int percent, size_t usedBytes, si
     
     // S1: Battery (y: 17-27)
     
-    _display.setCursor(0, 17);
+    _display.setCursor(0, 16);
     _display.print("PWR:");
 
     _display.setTextSize(1);
-    _display.setCursor(30, 17);
+    _display.setCursor(30, 16);
     _display.print(percent);
     _display.print("%");
-    _display.setCursor(60, 17);
+    _display.setCursor(60, 16);
     _display.printf("(%.2fV)", voltage);
 
     drawProgressBar(0, 24, 128, 2, percent);
 
-    // S2: Disk / SPIFFS (y: 31-41)
+    // S2: Disk / SPIFFS (y: 30-40)
 
-    _display.setCursor(30, 31);
+    _display.setCursor(30, 30);
     _display.print(formatSize(usedBytes));
     _display.print("/");
     _display.print(formatSize(totalBytes));
